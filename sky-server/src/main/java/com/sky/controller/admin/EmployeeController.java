@@ -1,6 +1,7 @@
 package com.sky.controller.admin;
 
 import com.sky.constant.JwtClaimsConstant;
+import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.entity.Employee;
 import com.sky.properties.JwtProperties;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,11 +28,13 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin/employee")
 @Slf4j
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class EmployeeController {
 
-    private final EmployeeService employeeService;
-    private final JwtProperties jwtProperties;
+    @Resource
+    private EmployeeService employeeService;
+    @Resource
+    private JwtProperties jwtProperties;
 
     /**
      * 登录
@@ -69,6 +74,13 @@ public class EmployeeController {
     @PostMapping("/logout")
     public Result<String> logout() {
         return Result.success();
+    }
+
+
+    @PostMapping
+    public Result<Boolean> saveEmployee(@RequestBody @Valid EmployeeDTO employeeDTO){
+        int result = employeeService.saveEmployee(employeeDTO);
+        return Result.success(result==1 ? Boolean.TRUE : Boolean.FALSE);
     }
 
 }

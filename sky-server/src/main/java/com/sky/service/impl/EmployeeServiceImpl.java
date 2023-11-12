@@ -1,7 +1,12 @@
 package com.sky.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sky.constant.MessageConstant;
+import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
+import com.sky.converter.EmployeeConverter;
+import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
@@ -9,15 +14,22 @@ import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
 import com.sky.service.EmployeeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
-@Service
-public class EmployeeServiceImpl implements EmployeeService {
+import javax.annotation.Resource;
+import java.time.LocalDateTime;
 
-    @Autowired
-    private EmployeeMapper employeeMapper;
+@Service
+@RequiredArgsConstructor
+public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper,Employee> implements EmployeeService {
+
+
+    private final EmployeeMapper employeeMapper;
+    private final EmployeeConverter employeeConverter;
+
 
     /**
      * 员工登录
@@ -30,7 +42,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         String password = employeeLoginDTO.getPassword();
 
         //1、根据用户名查询数据库中的数据
-        Employee employee = employeeMapper.getByUsername(username);
+        Employee employee = employeeMapper.selectOne(new LambdaQueryWrapper<Employee>()
+                                                         .eq(Employee::getUsername,username));
 
         //2、处理各种异常情况（用户名不存在、密码不对、账号被锁定）
         if (employee == null) {
@@ -53,6 +66,26 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         //3、返回实体对象
         return employee;
+    }
+
+    @Override
+    public int saveEmployee(EmployeeDTO employeeDTO) {
+        Employee employee = employeeConverter.employeeDto2Po(employeeDTO);
+        //设置账号的状态，默认正常状态 1表示正常 0表示锁定
+        employee.setStatus(StatusConstant.ENABLE);
+
+        //设置密码，默认密码123456
+        employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
+
+        //设置当前记录的创建时间和修改时间
+        employee.setCreateTime(LocalDateTime.now());
+        employee.setUpdateTime(LocalDateTime.now());
+
+        //设置当前记录创建人id和修改人id
+        employee.setCreateUser(10L);//目前写个假数据，后期修改
+        employee.setUpdateUser(10L);
+
+        return employeeMapper.insert(employee);
     }
 
 }

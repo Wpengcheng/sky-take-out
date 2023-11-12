@@ -20,7 +20,7 @@ public class Employee implements Serializable {
 
     private String username;
 
-    private String name;
+    private String  name;
 
     private String password;
 
