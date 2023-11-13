@@ -1,7 +1,10 @@
 package com.sky.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
@@ -9,19 +12,21 @@ import com.sky.context.BaseContext;
 import com.sky.converter.EmployeeConverter;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
+import com.sky.result.PageResult;
 import com.sky.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
-import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -87,6 +92,26 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper,Employee> im
         employee.setUpdateUser(BaseContext.getCurrentId());
 
         return employeeMapper.insert(employee);
+    }
+
+    /**
+     * 分页查询
+     *
+     * @param employeePageQueryDTO
+     * @return
+     */
+    public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
+        int size = employeePageQueryDTO.getPageSize();
+        int page = employeePageQueryDTO.getPage();
+        String name = employeePageQueryDTO.getName();
+        LambdaQueryWrapper<Employee> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(StringUtils.isNotBlank(employeePageQueryDTO.getName()), Employee::getName, name);
+        IPage<Employee> employeeIPage = employeeMapper.selectPage(new Page<>(page, size), wrapper);
+
+        long total = employeeIPage.getTotal();
+        List<Employee> records = employeeIPage.getRecords();
+
+        return new PageResult(total, records);
     }
 
 }
