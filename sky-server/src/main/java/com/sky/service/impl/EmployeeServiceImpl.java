@@ -114,4 +114,15 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper,Employee> im
         return new PageResult(total, records);
     }
 
+    /**
+     * 启用禁用员工账号
+     *
+     * @param status
+     * @param id
+     */
+    public void startOrStop(Integer status, Long id) {
+        employeeMapper.update(Employee.builder().status(status).build(),
+                new LambdaQueryWrapper<Employee>().eq(Employee::getId,id));
+    }
+
 }
