@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
@@ -105,7 +104,7 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper,Employee> im
         int page = employeePageQueryDTO.getPage();
         String name = employeePageQueryDTO.getName();
         LambdaQueryWrapper<Employee> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(StringUtils.isNotBlank(employeePageQueryDTO.getName()), Employee::getName, name);
+        wrapper.like(StringUtils.isNotBlank(employeePageQueryDTO.getName()), Employee::getName, name);
         IPage<Employee> employeeIPage = employeeMapper.selectPage(new Page<>(page, size), wrapper);
 
         long total = employeeIPage.getTotal();
@@ -128,6 +127,8 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper,Employee> im
     @Override
     public void updateByParam(EmployeeDTO employeeDTO) {
         Employee employee = employeeConverter.employeeDto2Po(employeeDTO);
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());
         employeeMapper.update(employee,new LambdaQueryWrapper<Employee>().eq(Employee::getId,employeeDTO.getId()));
     }
 
