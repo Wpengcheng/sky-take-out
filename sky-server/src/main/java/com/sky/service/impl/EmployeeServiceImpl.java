@@ -125,4 +125,10 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper,Employee> im
                 new LambdaQueryWrapper<Employee>().eq(Employee::getId,id));
     }
 
+    @Override
+    public void updateByParam(EmployeeDTO employeeDTO) {
+        Employee employee = employeeConverter.employeeDto2Po(employeeDTO);
+        employeeMapper.update(employee,new LambdaQueryWrapper<Employee>().eq(Employee::getId,employeeDTO.getId()));
+    }
+
 }

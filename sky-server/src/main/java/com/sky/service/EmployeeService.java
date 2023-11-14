@@ -33,4 +33,5 @@ public interface EmployeeService extends IService<Employee> {
      */
     void startOrStop(Integer status, Long id);
 
+    void updateByParam(EmployeeDTO employeeDTO);
 }
