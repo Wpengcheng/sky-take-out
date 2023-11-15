@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
-import com.sky.context.BaseContext;
 import com.sky.converter.EmployeeConverter;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
@@ -24,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -78,17 +76,8 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper,Employee> im
         Employee employee = employeeConverter.employeeDto2Po(employeeDTO);
         //设置账号的状态，默认正常状态 1表示正常 0表示锁定
         employee.setStatus(StatusConstant.ENABLE);
-
         //设置密码，默认密码123456
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
-
-        //设置当前记录的创建时间和修改时间
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
-
-        //设置当前记录创建人id和修改人id
-        employee.setCreateUser(BaseContext.getCurrentId());
-        employee.setUpdateUser(BaseContext.getCurrentId());
 
         return employeeMapper.insert(employee);
     }
@@ -127,8 +116,6 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper,Employee> im
     @Override
     public void updateByParam(EmployeeDTO employeeDTO) {
         Employee employee = employeeConverter.employeeDto2Po(employeeDTO);
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(BaseContext.getCurrentId());
         employeeMapper.update(employee,new LambdaQueryWrapper<Employee>().eq(Employee::getId,employeeDTO.getId()));
     }
 

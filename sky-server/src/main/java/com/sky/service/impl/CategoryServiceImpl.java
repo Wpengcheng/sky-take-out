@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sky.constant.StatusConstant;
-import com.sky.context.BaseContext;
 import com.sky.converter.CategoryConverter;
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
@@ -18,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -37,13 +35,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     public void save(CategoryDTO categoryDTO) {
         Category category = categoryConverter.categoryDto2Po(categoryDTO);
         category.setId(RandomNumberGenerator.generateRandomLong(10));
-        //设置当前记录的创建时间和修改时间
-        category.setCreateTime(LocalDateTime.now());
-        category.setUpdateTime(LocalDateTime.now());
-
-        //设置当前记录创建人id和修改人id
-        category.setCreateUser(BaseContext.getCurrentId());
-        category.setUpdateUser(BaseContext.getCurrentId());
         category.setStatus(StatusConstant.ENABLE);
         categoryMapper.insert(category);
     }
@@ -57,6 +48,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         LambdaQueryWrapper<Category> wrapper = new LambdaQueryWrapper<>();
         wrapper.like(StringUtils.isNotBlank(categoryPageQueryDTO.getName()), Category::getName, name);
         wrapper.eq(type!=null,Category::getType,type);
+        wrapper.orderByDesc(Category::getSort);
         IPage<Category> categoryIPage = categoryMapper.selectPage(new Page<>(page, size), wrapper);
         long total = categoryIPage.getTotal();
         List<Category> records = categoryIPage.getRecords();
@@ -72,8 +64,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     @Override
     public void update(CategoryDTO categoryDTO) {
         Category category = categoryConverter.categoryDto2Po(categoryDTO);
-        category.setUpdateTime(LocalDateTime.now());
-        category.setUpdateUser(BaseContext.getCurrentId());
         categoryMapper.update(category,new LambdaQueryWrapper<Category>().eq(Category::getId,categoryDTO.getId()));
     }
 

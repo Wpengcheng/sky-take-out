@@ -13,11 +13,9 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Employee implements Serializable {
+public class Employee extends Entity<Long> {
 
-    private static final long serialVersionUID = 1L;
 
-    private Long id;
 
     private String username;
 
@@ -33,12 +31,6 @@ public class Employee implements Serializable {
 
     private Integer status;
 
-    private LocalDateTime createTime;
 
-    private LocalDateTime updateTime;
-
-    private Long createUser;
-
-    private Long updateUser;
 
 }

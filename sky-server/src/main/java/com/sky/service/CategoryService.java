@@ -5,6 +5,7 @@ import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
 import com.sky.result.PageResult;
+
 import java.util.List;
 
 public interface CategoryService extends IService<Category> {
@@ -13,6 +14,7 @@ public interface CategoryService extends IService<Category> {
      * 新增分类
      * @param categoryDTO
      */
+
     void save(CategoryDTO categoryDTO);
 
     /**
