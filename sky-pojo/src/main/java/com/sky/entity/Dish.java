@@ -15,11 +15,10 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Dish implements Serializable {
+public class Dish extends Entity<Long>{
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
 
     //菜品名称
     private String name;
@@ -39,12 +38,6 @@ public class Dish implements Serializable {
     //0 停售 1 起售
     private Integer status;
 
-    private LocalDateTime createTime;
 
-    private LocalDateTime updateTime;
-
-    private Long createUser;
-
-    private Long updateUser;
 
 }

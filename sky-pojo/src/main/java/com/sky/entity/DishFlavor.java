@@ -14,11 +14,10 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DishFlavor implements Serializable {
+public class DishFlavor extends Entity<Long> {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
     //菜品id
     private Long dishId;
 
