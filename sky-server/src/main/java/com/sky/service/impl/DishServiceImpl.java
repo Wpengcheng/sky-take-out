@@ -1,6 +1,7 @@
 package com.sky.service.impl;
 
 
+import com.sky.converter.DishConverter;
 import com.sky.dto.DishDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
@@ -23,6 +24,7 @@ public class DishServiceImpl implements DishService {
 
     private final DishMapper dishMapper;
     private final DishFlavorMapper dishFlavorMapper;
+    private final DishConverter dishConverter;
 
     /**
      * 新增菜品和对应的口味
@@ -32,9 +34,8 @@ public class DishServiceImpl implements DishService {
     @Transactional
     public void saveWithFlavor(DishDTO dishDTO) {
 
-        Dish dish = new Dish();
-        BeanUtils.copyProperties(dishDTO, dish);
 
+        Dish dish = dishConverter.dtoToEntity(dishDTO);
         //向菜品表插入1条数据
         dishMapper.insert(dish);//后绪步骤实现
 

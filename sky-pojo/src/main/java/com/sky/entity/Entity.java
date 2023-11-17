@@ -24,7 +24,7 @@ public class Entity<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
-    @TableId(value = "id", type = IdType.INPUT)
+    @TableId(value = "id", type = IdType.AUTO)
     @ApiModelProperty(value = "主键")
     protected T id;
 
