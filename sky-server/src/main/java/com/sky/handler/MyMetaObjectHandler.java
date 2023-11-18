@@ -7,6 +7,7 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Random;
 
 @Slf4j
 @Component
@@ -16,7 +17,9 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         //三个参数：字段名，字段值，元对象参数
+        long id = (long) (Math.pow(10, 9) + new Random().nextInt((int) Math.pow(10, 9)));
         Long currentId = BaseContext.getCurrentId();
+        this.setFieldValByName("id", id,metaObject);
         this.setFieldValByName("createTime", LocalDateTime.now(),metaObject);
         this.setFieldValByName("updateTime",LocalDateTime.now(),metaObject);
         this.setFieldValByName("createUser",currentId,metaObject);
@@ -31,4 +34,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.setFieldValByName("updateUser",currentId,metaObject);
 
     }
+
+
+
+
 }
