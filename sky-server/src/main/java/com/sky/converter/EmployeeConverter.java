@@ -11,10 +11,9 @@ import org.mapstruct.factory.Mappers;
  * @Description
  */
 @Mapper(componentModel = "Spring")
-public interface EmployeeConverter {
+public interface EmployeeConverter extends BaseConverter<EmployeeDTO,Employee>{
 
 	EmployeeConverter INSTANCE = Mappers.getMapper(EmployeeConverter.class);
 
-	Employee employeeDto2Po(EmployeeDTO employeeDTO);
 
 }

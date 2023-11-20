@@ -33,7 +33,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
 
     @Override
     public void save(CategoryDTO categoryDTO) {
-        Category category = categoryConverter.categoryDto2Po(categoryDTO);
+        Category category = categoryConverter.dto2Entity(categoryDTO);
         category.setId(RandomNumberGenerator.generateRandomLong(10));
         category.setStatus(StatusConstant.ENABLE);
         categoryMapper.insert(category);
@@ -63,7 +63,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
 
     @Override
     public void update(CategoryDTO categoryDTO) {
-        Category category = categoryConverter.categoryDto2Po(categoryDTO);
+        Category category = categoryConverter.dto2Entity(categoryDTO);
         categoryMapper.update(category,new LambdaQueryWrapper<Category>().eq(Category::getId,categoryDTO.getId()));
     }
 

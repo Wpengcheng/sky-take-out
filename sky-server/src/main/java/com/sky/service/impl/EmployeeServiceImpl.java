@@ -73,7 +73,7 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper,Employee> im
 
     @Override
     public int saveEmployee(EmployeeDTO employeeDTO) {
-        Employee employee = employeeConverter.employeeDto2Po(employeeDTO);
+        Employee employee = employeeConverter.dto2Entity(employeeDTO);
         //设置账号的状态，默认正常状态 1表示正常 0表示锁定
         employee.setStatus(StatusConstant.ENABLE);
         //设置密码，默认密码123456
@@ -115,7 +115,7 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper,Employee> im
 
     @Override
     public void updateByParam(EmployeeDTO employeeDTO) {
-        Employee employee = employeeConverter.employeeDto2Po(employeeDTO);
+        Employee employee = employeeConverter.dto2Entity(employeeDTO);
         employeeMapper.update(employee,new LambdaQueryWrapper<Employee>().eq(Employee::getId,employeeDTO.getId()));
     }
 

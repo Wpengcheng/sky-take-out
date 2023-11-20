@@ -13,10 +13,9 @@ import org.mapstruct.factory.Mappers;
  * @Description
  */
 @Mapper(componentModel = "Spring")
-public interface CategoryConverter {
+public interface CategoryConverter extends BaseConverter<CategoryDTO,Category>{
 
 	CategoryConverter INSTANCE = Mappers.getMapper(CategoryConverter.class);
 
-	Category categoryDto2Po(CategoryDTO categoryDTO);
 
 }

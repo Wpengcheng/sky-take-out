@@ -2,8 +2,11 @@ package com.sky.converter;
 
 import com.sky.dto.DishDTO;
 import com.sky.entity.Dish;
+import com.sky.vo.DishVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 /**
  * @Author 方唐镜
@@ -14,6 +17,8 @@ import org.mapstruct.factory.Mappers;
 public interface DishConverter extends BaseConverter<DishDTO, Dish>{
 
 	DishConverter INSTANCE = Mappers.getMapper(DishConverter.class);
+
+	List<DishVO> entity2VoList(List<Dish> dishList);
 
 
 }

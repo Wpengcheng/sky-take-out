@@ -10,13 +10,11 @@ import org.mapstruct.factory.Mappers;
  * @Create 2023-11-12 11:23
  * @Description
  */
-//@Mapper(componentModel = "Spring")
 public interface BaseConverter<DTO, Entity>  {
 
-	//BaseConverter INSTANCE = Mappers.getMapper(BaseConverter.class);
 
-	Entity dtoToEntity(DTO dto);
+	Entity dto2Entity(DTO dto);
 
-	DTO entityToDto(Entity entity);
+	DTO entity2Dto(Entity entity);
 
 }
