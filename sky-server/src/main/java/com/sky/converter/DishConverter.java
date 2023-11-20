@@ -19,6 +19,7 @@ public interface DishConverter extends BaseConverter<DishDTO, Dish>{
 	DishConverter INSTANCE = Mappers.getMapper(DishConverter.class);
 
 	List<DishVO> entity2VoList(List<Dish> dishList);
+	DishVO entity2Vo(Dish dish);
 
 
 }
