@@ -9,10 +9,7 @@ import com.sky.constant.StatusConstant;
 import com.sky.converter.DishConverter;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
-import com.sky.entity.Category;
-import com.sky.entity.Dish;
-import com.sky.entity.DishFlavor;
-import com.sky.entity.SetmealDish;
+import com.sky.entity.*;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.CategoryMapper;
 import com.sky.mapper.DishFlavorMapper;
@@ -29,7 +26,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -157,5 +156,34 @@ public class DishServiceImpl implements DishService {
 
         }
     }
+
+	/**
+	 * 条件查询菜品和口味
+	 * @param dish
+	 * @return
+	 */
+	public List<DishVO> listWithFlavor(Dish dish) {
+		LambdaQueryWrapper<Dish> wrapper = new LambdaQueryWrapper<>();
+		wrapper.eq(StringUtils.isNotBlank(dish.getName()),Dish::getName,dish.getName());
+		wrapper.eq(Objects.nonNull(dish.getCategoryId()),Dish::getCategoryId,dish.getCategoryId());
+		wrapper.eq(Objects.nonNull(dish.getStatus()),Dish::getStatus,dish.getStatus());
+
+		List<Dish> dishList = dishMapper.selectList(wrapper);
+
+		List<DishVO> dishVOList = new ArrayList<>();
+
+		for (Dish d : dishList) {
+			DishVO dishVO = new DishVO();
+			BeanUtils.copyProperties(d,dishVO);
+
+			//根据菜品id查询对应的口味
+			List<DishFlavor> flavors = dishFlavorMapper.selectList(new LambdaQueryWrapper<DishFlavor>().eq(DishFlavor::getDishId,d.getId()));
+
+			dishVO.setFlavors(flavors);
+			dishVOList.add(dishVO);
+		}
+
+		return dishVOList;
+	}
 
 }

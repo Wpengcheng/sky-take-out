@@ -15,11 +15,10 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Setmeal implements Serializable {
+public class Setmeal extends Entity<Long> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
 
     //分类id
     private Long categoryId;
@@ -39,11 +38,4 @@ public class Setmeal implements Serializable {
     //图片
     private String image;
 
-    private LocalDateTime createTime;
-
-    private LocalDateTime updateTime;
-
-    private Long createUser;
-
-    private Long updateUser;
 }

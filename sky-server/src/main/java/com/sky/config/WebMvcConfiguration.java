@@ -1,13 +1,23 @@
 package com.sky.config;
 
+import com.sky.constant.JwtClaimsConstant;
+import com.sky.dto.UserLoginDTO;
+import com.sky.entity.User;
 import com.sky.interceptor.JwtTokenAdminInterceptor;
 import com.sky.json.JacksonObjectMapper;
+import com.sky.properties.JwtProperties;
+import com.sky.result.Result;
+import com.sky.service.UserService;
+import com.sky.utils.JwtUtil;
+import com.sky.vo.UserLoginVO;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
@@ -18,17 +28,19 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 配置类，注册web层相关组件
  */
 @Configuration
 @Slf4j
+@RequiredArgsConstructor
 public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
-    @Autowired
-    private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
+    private final JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
 
     /**
      * 注册自定义拦截器
@@ -126,5 +138,8 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
         return docket;
     }
+
+
+
 
 }
