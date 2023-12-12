@@ -3,6 +3,7 @@ package com.sky.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.sky.entity.Setmeal;
 import com.sky.vo.DishItemVO;
+import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -21,5 +22,12 @@ public interface SetmealMapper extends BaseMapper<Setmeal> {
 		        "from setmeal_dish sd left join dish d on sd.dish_id = d.id " +
 		        "where sd.setmeal_id = #{setmealId}")
 	List<DishItemVO> getDishItemBySetmealId(Long setmealId);
+
+	/**
+	 * 根据id查询套餐和套餐菜品关系
+	 * @param id
+	 * @return
+	 */
+	SetmealVO getByIdWithDish(Long id);
 
 }
