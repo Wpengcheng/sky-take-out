@@ -170,19 +170,14 @@ public class DishServiceImpl implements DishService {
 
 		List<Dish> dishList = dishMapper.selectList(wrapper);
 
-		List<DishVO> dishVOList = new ArrayList<>();
+		List<DishVO> dishVOList = dishConverter.entity2VoList(dishList);
 
-		for (Dish d : dishList) {
-			DishVO dishVO = new DishVO();
-			BeanUtils.copyProperties(d,dishVO);
-
-			//根据菜品id查询对应的口味
+		dishVOList.forEach(d->{
 			List<DishFlavor> flavors = dishFlavorMapper.selectList(new LambdaQueryWrapper<DishFlavor>().eq(DishFlavor::getDishId,d.getId()));
-
-			dishVO.setFlavors(flavors);
-			dishVOList.add(dishVO);
-		}
-
+			if (CollectionUtils.isEmpty(flavors)){
+				d.setFlavors(flavors);
+			}
+		});
 		return dishVOList;
 	}
 

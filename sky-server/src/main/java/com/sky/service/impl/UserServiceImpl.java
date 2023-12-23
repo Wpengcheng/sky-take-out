@@ -76,7 +76,6 @@ public class UserServiceImpl implements UserService {
         String json = HttpClientUtil.doGet(WX_LOGIN, map);
 
         JSONObject jsonObject = JSON.parseObject(json);
-        String openid = jsonObject.getString("openid");
-        return openid;
+        return jsonObject.getString("openid");
     }
 }
