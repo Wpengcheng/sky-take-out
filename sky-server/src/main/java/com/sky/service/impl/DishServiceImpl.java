@@ -186,4 +186,9 @@ public class DishServiceImpl implements DishService {
 		return dishVOList;
 	}
 
+	@Override
+	public List<Dish> list(Long categoryId) {
+		return dishMapper.selectList(new LambdaQueryWrapper<Dish>().eq(Dish::getCategoryId,categoryId));
+	}
+
 }
