@@ -30,7 +30,7 @@ public class OrderTask {
 
         LocalDateTime time = LocalDateTime.now().plusMinutes(-15);
 
-        // select * from orders where status = 1 and order_time < 当前时间-15分钟
+        // 把15分钟前的订单查询出来修改状态
         List<Orders> ordersList = orderMapper.getByStatusAndOrdertimeLT(Orders.PENDING_PAYMENT, time);
         if(ordersList != null && ordersList.size() > 0){
             ordersList.forEach(order -> {
